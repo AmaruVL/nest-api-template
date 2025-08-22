@@ -1,0 +1,196 @@
+{
+  // ===== Generales =====
+  "Log: Console.log": {
+    "prefix": "qlog",
+    "description": "Insert a console.log for debugging",
+    "scope": "typescript",
+    "body": "console.log('${1:labelName}', ${2:value})"
+  },
+  "Log: Console.time": {
+    "prefix": "qtime",
+    "description": "Insert a console.time for debugging",
+    "scope": "typescript",
+    "body": [
+      "console.time('${1:labelName}')",
+      "console.timeEnd('${1:labelName}')"
+    ]
+  },
+
+  // ===== NestJs - DTOs =====
+  "DTO: Basic": {
+    "prefix": "qdto",
+    "description": "Generate a new DTO class with a default string property",
+    "scope": "typescript",
+    "body": [
+      "import { IsString } from 'src/core'\n",
+      "export class ${TM_FILENAME/([^.]+).*/${1:/pascalcase}/}Dto {",
+      "\t@IsString()",
+      "\t${1:property}: string",
+      "}",
+    ],
+  },
+  "DTO: Update": {
+    "prefix": "qdtoup",
+    "description": "Generate a DTO that extends another with PartialType",
+    "scope": "typescript",
+    "body": [
+      "import { PartialType } from '@nestjs/swagger'\n",
+      "export class ${TM_FILENAME/([^.]+).*/${1:/pascalcase}/}Dto extends PartialType(${2:NameDto}) {$0}"
+    ],
+  },
+  "DTO: FormData Schema": {
+    "prefix": "qdtoschema",
+    "description": "Create an ApiResponseSchemaHost for a form-data file upload",
+    "scope": "typescript",
+    "body": [
+      "export const ${TM_FILENAME/([^.]+).*/${1:/pascalcase}/}Schema: ApiResponseSchemaHost = {",
+      "\tschema: {",
+      "\t\ttype: 'object',",
+      "\t\trequired: ['${2:fileProp}'],",
+      "\t\tproperties: {",
+      "\t\t\t${2:fileProp}: { type: 'string', format: 'binary' },",
+      "\t\t\t// enumProp: { type: 'string', enum: Object.values(enumValue) },",
+      "\t\t},",
+      "\t},",
+      "}"
+    ]
+  },
+
+  // ===== NestJs - Controllers =====
+  "Controller: Get All": {
+    "prefix": "qget",
+    "description": "Create a GET controller method for listing all items",
+    "scope": "typescript",
+    "body": [
+      "@Get('listar', { summary: '${0:Listar valores}' })",
+      "${1:nameFunction}() {",
+      "\treturn this.${TM_FILENAME/([^.]+).*/${1:/camelcase}/}Service.${1:nameFunction}()",
+      "}",
+    ],
+  },
+  "Controller: Get By ID": {
+    "prefix": "qgetid",
+    "description": "Create a GET controller method for fetching by ID",
+    "scope": "typescript",
+    "body": [
+      "@Get('obtener/:${2:id}', { summary: '${0:Obtener valor por Id}' })",
+      "${1:nameFunction}(@Param('${2:id}') ${2:id}: string) {",
+      "\treturn this.${TM_FILENAME/([^.]+).*/${1:/camelcase}/}Service.${1:nameFunction}(+${2:id})",
+      "}",
+    ],
+  },
+  "Controller: Post": {
+    "prefix": "qpost",
+    "description": "Create a POST controller method",
+    "scope": "typescript",
+    "body": [
+      "@Post('crear', { summary: '${0:Crear un nuevo valor}' })",
+      "${1:nameFunction}(@Body() dto: NameDto) {",
+      "\treturn this.${TM_FILENAME/([^.]+).*/${1:/camelcase}/}Service.${1:nameFunction}(dto)",
+      "}",
+    ],
+  },
+  "Controller: Post FormData": {
+    "prefix": "qpostfile",
+    "description": "Create a POST controller method for file upload",
+    "scope": "typescript",
+    "body": [
+      "@ApiFormData(NameSchema)",
+      "@Post('subir-archivo', { summary: '${0:Subir un archivo}' })",
+      "${1:nameFunction}(@FormDataBody() dto: NameDto) {",
+      "\treturn this.${TM_FILENAME/([^.]+).*/${1:/camelcase}/}Service.${1:nameFunction}(dto)",
+      "}"
+    ]
+  },
+  "Controller: Patch": {
+    "prefix": "qpatch",
+    "description": "Create a PATCH controller method",
+    "scope": "typescript",
+    "body": [
+      "@Patch('actualizar/:${2:id}', { summary: '${0:Actualizar un valor por Id}' })",
+      "${1:nameFunction}(@Param('${2:id}') ${2:id}: string, @Body() dto: NameDto) {",
+      "\treturn this.${TM_FILENAME/([^.]+).*/${1:/camelcase}/}Service.${1:nameFunction}(+${2:id}, dto)",
+      "}",
+    ],
+  },
+  "Controller: Put": {
+    "prefix": "qput",
+    "description": "Create a PUT controller method",
+    "scope": "typescript",
+    "body": [
+      "@Put('actualizar/:${2:id}', { summary: '${0:Actualizar un valor por Id}' })",
+      "${1:nameFunction}(@Param('${2:id}') ${2:id}: string, @Body() dto: NameDto) {",
+      "\treturn this.${TM_FILENAME/([^.]+).*/${1:/camelcase}/}Service.${1:nameFunction}(+${2:id}, dto)",
+      "}",
+    ],
+  },
+  "Controller: Delete": {
+    "prefix": "qdel",
+    "description": "Create a DELETE controller method",
+    "scope": "typescript",
+    "body": [
+      "@Delete('eliminar/:${2:id}', { summary: '${0:Eliminar un valor por Id}' })",
+      "${1:nameFunction}(@Param('${2:id}') ${2:id}: string) {",
+      "\treturn this.${TM_FILENAME/([^.]+).*/${1:/camelcase}/}Service.${1:nameFunction}(+${2:id})",
+      "}",
+    ],
+  },
+
+  // ===== NestJs - Services =====
+  "Service: Basic": {
+    "prefix": "qser",
+    "description": "Create a basic NestJS service with DatabaseService",
+    "scope": "typescript",
+    "body": [
+      "import { Injectable } from '@nestjs/common'",
+      "import { DatabaseService } from 'src/core'\n",
+      "@Injectable()",
+      "export class ${TM_FILENAME/([^.]+).*/${1:/pascalcase}/}Service {",
+      "\tconstructor(private readonly dbService: DatabaseService) {}\n",
+      "\tasync ${1:nameFunction}($2) {$0}",
+      "}",
+    ],
+  },
+
+  // ===== Prisma =====
+  "Prisma: DB constructor": {
+    "prefix": "qdbc",
+    "description": "Database constructor",
+    "scope": "typescript",
+    "body": "constructor(private readonly dbService: DatabaseService) {}$0",
+  },
+  "Prisma: Use DB service": {
+    "prefix": "qdbs",
+    "description": "Use a prisma db service",
+    "scope": "typescript",
+    "body": "await this.dbService"
+  },
+  "Prisma: Transaction": {
+    "prefix": "qdbtx",
+    "description": "Start a Prisma transaction",
+    "scope": "typescript",
+    "body": "await this.dbService.\\$transaction(async tx => {$0})"
+  },
+  "Prisma: Raw Query": {
+    "prefix": "qdbraw",
+    "description": "Execute a raw SQL query with Prisma",
+    "scope": "typescript",
+    "body": "await this.dbService.\\$queryRaw`$0`"
+  },
+  "Prisma: Raw Query (Typed)": {
+    "prefix": "qdbrawt",
+    "description": "Execute a typed raw SQL query with Prisma",
+    "scope": "typescript",
+    "body": "await this.dbService.\\$queryRawTyped($0)"
+  },
+  "Prisma: Seed Array": {
+    "prefix": "qseed",
+    "description": "Generate a Prisma seed array based on filename",
+    "scope": "typescript",
+    "body": [
+      "import { Prisma } from '../client'\n",
+      "export const ${1:tableName}Seed: Prisma.${1}UncheckedCreateInput[] = [{$0}]"
+      // "export const ${1:tableName}Seed: Prisma.${1/(.*)/${1:/capitalize}/}UncheckedCreateInput[] = [{$0}]"
+    ]
+  },
+}

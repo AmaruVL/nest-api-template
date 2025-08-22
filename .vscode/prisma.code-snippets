@@ -1,0 +1,79 @@
+{
+  // ===== Models =====
+  "Model: Base with integer id and audit": {
+    "prefix": "qmodel",
+    "scope": "prisma",
+    "description": "Create a Prisma model with integer id and audit fields",
+    "body": [
+      "model ${1:model_name} {",
+      "\t${2:id} Int @id @default(autoincrement())",
+      "\t$0",
+      "\t/// Audit fields",
+      "\testado String @default(\"A\") @db.Char(1)",
+      "\tfecha_creacion DateTime @default(now()) @db.Timestamptz()",
+      "}"
+    ]
+  },
+  // "Model: Base with integer id and audit": {
+  //   "prefix": "qmodel",
+  //   "scope": "prisma",
+  //   "description": "Create a Prisma model with integer id and audit fields",
+  //   "body": [
+  //     "model ${1:ModelName} {",
+  //     "\t${2:id} Int @id @default(autoincrement())",
+  //     "\t$0",
+  //     "\t/// Audit fields",
+  //     "\testadoRegistro EstadoRegistro @default(activo)",
+  //     "\tfechaCreacion DateTime @default(now())",
+  //     "\tfechaModificacion DateTime @updatedAt",
+  //     "}"
+  //   ]
+  // },
+  "Model: Base with string id and audit": {
+    "prefix": "qmodels",
+    "scope": "prisma",
+    "description": "Create a Prisma model with string id and audit fields",
+    "body": [
+      "model ${1:model_name} {",
+      "\t${2:id} String @id @default(cuid()) @db.VarChar(36)",
+      "\t$0",
+      "\t/// Audit fields",
+      "\testado String @default(\"A\") @db.Char(1)",
+      "\tfecha_creacion DateTime @default(now()) @db.Timestamptz()",
+      "}"
+    ]
+  },
+
+  // ===== Audit & Utilities =====
+  "Field: Audit Fields": {
+    "prefix": "qaudit",
+    "scope": "prisma",
+    "description": "Insert audit fields (estadoRegistro, fechaCreacion, fechaModificacion)",
+    "body": [
+      "/// Audit fields",
+      "estadoRegistro EstadoRegistro @default(activo)",
+      "fechaCreacion DateTime @default(now())",
+      "fechaModificacion DateTime @updatedAt"
+    ]
+  },
+  "Field: Map from clipboard": {
+    "prefix": "qmap",
+    "scope": "prisma",
+    "description": "Map property name using clipboard value",
+    "body": "@map(\"${CLIPBOARD/([a-z])([A-Z])/${1}_${2:/downcase}/g}\")"
+  },
+
+  // ===== Strings & VarChar =====
+  "Attr: @db.VarChar(n)": {
+    "prefix": "qv",
+    "scope": "prisma",
+    "description": "Apply @db.VarChar(length) to current field",
+    "body": "@db.VarChar($1)"
+  },
+  "Field: String with VarChar": {
+    "prefix": "qrv",
+    "scope": "prisma",
+    "description": "Insert a String field using @db.VarChar(length)",
+    "body": "${1:property} String @db.VarChar($2)$0"
+  }
+}

@@ -33,7 +33,9 @@ lerna-debug.log*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
-!.vscode/extensions.json
+!.vscode/extensions.son
+!.vscode/*.code-snippets
+!.vscode/*.code-workspace
 
 # dotenv environment variable files
 .env
@@ -41,6 +43,17 @@ lerna-debug.log*
 .env.test.local
 .env.production.local
 .env.local
+
+# generated files
+temp
+generated
+uploads
+src/temp
+src/metadata.ts
+src/core/database/client
+logs*.zip
+dist*.zip
+
 
 # temp directory
 .temp
@@ -52,5 +65,5 @@ pids
 *.seed
 *.pid.lock
 
-# Diagnostic reports (https://nodejs.org/api/report.html)
+# Diagnostic reports (https://nodes.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
