@@ -4,7 +4,7 @@
  *
  * Además aplica encodeURIComponent al DB_PASSWORD.
  */
-export function expandEnvVars(value: string | undefined): string | undefined {
+export function expandDatabaseEnvVars(value: string | undefined): string | undefined {
   if (!value) return value
   return value.replace(/\$\{(\w+)\}/g, (_, name) => {
     let replacement = process.env[name]
