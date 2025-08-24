@@ -1,5 +1,5 @@
 /**
- * @overview Configuración de Prisma ORM
+ * @fileoverview Configuración de Prisma ORM
  * @see https://www.prisma.io/docs/orm/reference/prisma-config-reference#using-environment-variables
  */
 import path from 'node:path'
