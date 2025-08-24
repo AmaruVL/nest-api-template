@@ -1,4 +1,3 @@
-
 {
   "folders": [
     {
@@ -9,5 +8,28 @@
       "name": "modules",
       "path": "../src",
     },
-  ]
+  ],
+  "settings": {
+    "[typescript][json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+    },
+    "[prisma]": {
+      "editor.defaultFormatter": "Prisma.prisma",
+      "editor.formatOnSave": true,
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/pnpm-lock.yaml": true,
+    },
+  },
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "Prisma.prisma",
+      "editorconfig.editorconfig"
+    ]
+  }
 }
