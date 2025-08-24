@@ -1,0 +1,20 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+model Usuario {
+  idUsuario Int @id @default(autoincrement())
+
+  /// Audit fields
+  estado        String   @default("A") @db.Char(1)
+  fechaCreacion DateTime @default(now()) @db.Timestamptz()
+}
