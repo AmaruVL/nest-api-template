@@ -1,74 +1,57 @@
+import path from 'node:path'
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import path from 'node:path'
+import { BaseEnvReader } from './base-env-reader'
 import { Environment } from '../global/global.enums'
 
 @Injectable()
-export class EnvService {
-  constructor(private readonly configService: ConfigService) {}
-
-  // MARK: Privados
-  private getString(key: string): string {
-    return this.configService.getOrThrow<string>(key)
+export class EnvService extends BaseEnvReader {
+  constructor(private readonly cfg: ConfigService) {
+    super((key) => cfg.get<string | undefined>(key))
   }
 
-  private getNumber(key: string): number {
-    const value = this.getString(key)
-    const parsed = Number(value)
-    if (isNaN(parsed)) {
-      throw new Error(`Environment variable ${key} should be a number`)
-    }
-    return parsed
-  }
-
-  private getBoolean(key: string): boolean {
-    return this.getString(key).toLowerCase() === 'true'
-  }
-
-  private getJson<T>(key: string): T {
-    const value = this.getString(key)
-    try {
-      return JSON.parse(value) as T
-    } catch {
-      throw new Error(`Environment variable ${key} should be valid JSON`)
-    }
-  }
-
-  // MARK: Getters
-  // CONTAINER ENV
-  get isContainer(): boolean {
-    return this.getBoolean('IS_CONTAINER')
-  }
-
-  // SERVIDOR
+  // SERVER
   get nodeEnv(): Environment {
-    return this.getString('NODE_ENV') as Environment
+    return this.reqString('NODE_ENV') as Environment
   }
 
   get port(): number {
-    return this.getNumber('PORT')
+    return this.reqNumber('PORT')
   }
 
   get corsAllowedOrigins(): string[] {
-    return this.getJson<string[]>('CORS_ALLOWED_ORIGINS')
+    return this.reqJson<string[]>('CORS_ALLOWED_ORIGINS')
   }
 
   get showApiDocs(): boolean {
-    return this.getBoolean('SHOW_API_DOCS')
+    return this.optBoolean('SHOW_API_DOCS', true)!
   }
 
   get showDbQueries(): boolean {
-    return this.getBoolean('SHOW_DB_QUERIES')
+    return this.optBoolean('SHOW_DB_QUERIES', false)!
   }
 
-  // DIRECTORIO ARCHIVOS
+  // CONTAINER
+  get isContainer(): boolean {
+    return this.optBoolean('IS_CONTAINER', false)!
+  }
+
+  // PATHS
   get uploadsFilesPath(): string {
     const defaultPath = path.join(process.cwd(), 'uploads')
-    if (this.isDocker)
-      return this.configService.get<string>('UPLOADS_FILES_PATH') || path.join(process.cwd(), 'uploads') // fallback
+
+    if (this.isContainer) {
+      return this.optString('FILES_CONTAINER_PATH', defaultPath)!
+    }
+    return this.optString('UPLOADS_FILES_PATH', defaultPath)!
   }
 
   get logsFilesPath(): string {
-    return this.configService.get<string>('LOGS_FILES_PATH') || path.join(process.cwd(), 'logs') // fallback
+    const defaultPath = path.join(process.cwd(), 'logs')
+
+    if (this.isContainer) {
+      return this.optString('LOGS_CONTAINER_PATH', defaultPath)!
+    }
+    return this.optString('LOGS_FILES_PATH', defaultPath)!
   }
 }
