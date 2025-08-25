@@ -1,0 +1,6 @@
+export * from './app.factory'
+export * from './swagger.setup'
+export * from './logger.setup'
+export * from './static.setup'
+export * from './cors.setup'
+export * from './start-app'

@@ -35,11 +35,12 @@ export class EnvService {
   }
 
   // MARK: Getters
-  // SERVIDOR
-  get isDocker(): boolean {
-    return this.getBoolean('IS_DOCKER')
+  // CONTAINER ENV
+  get isContainer(): boolean {
+    return this.getBoolean('IS_CONTAINER')
   }
 
+  // SERVIDOR
   get nodeEnv(): Environment {
     return this.getString('NODE_ENV') as Environment
   }
@@ -62,7 +63,9 @@ export class EnvService {
 
   // DIRECTORIO ARCHIVOS
   get uploadsFilesPath(): string {
-    return this.configService.get<string>('UPLOADS_FILES_PATH') || path.join(process.cwd(), 'uploads') // fallback
+    const defaultPath = path.join(process.cwd(), 'uploads')
+    if (this.isDocker)
+      return this.configService.get<string>('UPLOADS_FILES_PATH') || path.join(process.cwd(), 'uploads') // fallback
   }
 
   get logsFilesPath(): string {

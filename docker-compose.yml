@@ -1,0 +1,18 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: api-tramite
+    container_name: tramite-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - IS_CONTAINER=true
+      - FILES_CONTAINER_PATH=/app/files
+    ports:
+      - "${PORT}:${PORT}"
+    volumes:
+      - "${UPLOADS_FILES_PATH}:/app/files/uploads"
+      - "${LOGS_FILES_PATH}:/app/files/logs"
