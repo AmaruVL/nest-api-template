@@ -1,6 +1,7 @@
 import { ValidationPipe } from '@nestjs/common'
 import { createApp } from './core/bootstrap/app.factory'
 import { EnvService } from './core/env/env.service'
+import { setupCors, setupLogger, setupStatic, setupSwagger, startApp } from './core/bootstrap'
 // import { createApp, setupSwagger, setupLogger, setupStatic, setupCors, startApp } from './core/bootstrap'
 // import { join } from 'path'
 
@@ -11,8 +12,7 @@ async function bootstrap() {
   const envService = app.get(EnvService)
   const port = envService.port
   const corsOrigins = envService.corsAllowedOrigins
-  const isDocker = envService.isDocker
-  const uploadsPath = isDocker ? '/app/files/uploads' : envService.uploadsFilesPath
+  const uploadsPath = envService.uploadsFilesPath
 
   // Global app settings
   app.setGlobalPrefix('api-sgd')
@@ -20,8 +20,8 @@ async function bootstrap() {
 
   // Modular setup
   await setupSwagger(app)
-  setupLogger(app)
   await setupStatic(app, uploadsPath)
+  setupLogger(app)
   setupCors(app, corsOrigins)
 
   // Start server

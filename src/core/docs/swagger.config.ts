@@ -1,8 +1,12 @@
+/**
+ * @fileoverview Configuración de Swagger (ruta, options, builder).
+ */
 import { DocumentBuilder, SwaggerCustomOptions } from '@nestjs/swagger'
 
 // Swagger custom options
 export const docPath = 'api/docs'
-const docJsonPath = docPath + '/json'
+export const docJsonPath = `${docPath}/json`
+
 export const docOptions: SwaggerCustomOptions = {
   customSiteTitle: 'API Documentation',
   jsonDocumentUrl: docJsonPath,
