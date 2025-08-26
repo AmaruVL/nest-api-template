@@ -1,8 +1,11 @@
+/**
+ * @fileoverview Servicio para acceder a las variables de entorno validado y tipado.
+ */
 import path from 'node:path'
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { BaseEnvReader } from './base-env-reader'
 import { Environment } from '../global/global.enums'
+import { BaseEnvReader } from './readers/base.reader'
 
 @Injectable()
 export class EnvService extends BaseEnvReader {

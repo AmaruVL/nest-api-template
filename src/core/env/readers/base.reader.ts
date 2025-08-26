@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Clase base para lectura de variables de entorno.
+ * Proporciona métodos `req*` (requeridos) y `opt*` (opcionales) para parsear valores a string, number, boolean o JSON.
+ */
+
 export type EnvGetter = (key: string) => string | undefined
 
 export class BaseEnvReader {

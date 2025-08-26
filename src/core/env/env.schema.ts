@@ -1,7 +1,11 @@
-import { IsEnum, IsIn, IsNotEmpty, IsOptional, IsPort, IsString } from 'class-validator'
+/**
+ * @fileoverview Esquema de validación para las variables de entorno usando class-validator.
+ */
+
+import { IsBooleanString, IsEnum, IsNotEmpty, IsOptional, IsPort, IsString } from 'class-validator'
 import { Environment } from '../global/global.enums'
 
-export class EnvironmentVariablesDto {
+export class EnvironmentSchema {
   // SERVIDOR
   @IsEnum(Environment)
   NODE_ENV: Environment
@@ -19,12 +23,12 @@ export class EnvironmentVariablesDto {
 
   @IsString()
   @IsNotEmpty()
-  @IsIn(['true', 'false'])
+  @IsBooleanString()
   SHOW_API_DOCS: string
 
   @IsString()
   @IsNotEmpty()
-  @IsIn(['true', 'false'])
+  @IsBooleanString()
   SHOW_DB_QUERIES: string
 
   // BASE DE DATOS
