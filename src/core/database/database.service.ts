@@ -3,8 +3,11 @@ import { Injectable, OnApplicationShutdown, OnModuleInit } from '@nestjs/common'
 import { PrismaClient } from 'generated/prisma'
 import { formatPostgresQuery } from './helpers/format-query.helper'
 import { COLORS } from '../global/global.constants'
+import { EnvReaderFromProcess } from '../env/readers/process.reader'
 
-const showDbQueries = process.env.SHOW_DB_QUERIES === 'true'
+// const showDbQueries = process.env.SHOW_DB_QUERIES === 'true'
+const env = new EnvReaderFromProcess()
+const showDbQueries = env.showDbQueries
 
 @Injectable()
 export class DatabaseService extends PrismaClient implements OnModuleInit, OnApplicationShutdown {

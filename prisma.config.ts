@@ -5,17 +5,15 @@
 import path from 'node:path'
 import 'dotenv/config'
 import { defineConfig } from 'prisma/config'
-import { expandDatabaseEnvVars } from 'src/core'
+import { EnvReaderFromProcess } from './src/core'
 
-// Obtener cadena de conexión de la base de datos
+const env = new EnvReaderFromProcess()
+
 const dbPath = path.join(__dirname, 'src/core/database')
-const dbUrlRaw = process.env.DB_URL
-if (!dbUrlRaw) throw new Error('Environment variable DB_URL is not set')
 
-// Sobreescribiendo cadena de conexión con las variables de entorno expandidas
-process.env.DB_URL = expandDatabaseEnvVars(dbUrlRaw)
+// Sobrescribir process.env.DB_URL con la versión expandida
+process.env.DB_URL = env.databaseUrl
 
-// Exportando configuración
 export default defineConfig({
   schema: path.join(dbPath, 'database.schema.prisma'),
   migrations: {
