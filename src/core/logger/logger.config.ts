@@ -1,14 +1,19 @@
+/**
+ * @fileoverview Configuración del logger para Fastify usando Pino.
+ */
 import { FastifyLoggerOptions, FastifyReply, FastifyRequest } from 'fastify'
 import { PinoLoggerOptions } from 'fastify/types/logger'
 import { Environment } from '../global/global.enums'
 import { rotationStream } from './rotation.config'
+import { EnvReaderFromProcess } from '../env/readers/process.reader'
 
 type LoggerConfig = boolean | (FastifyLoggerOptions & PinoLoggerOptions) | undefined
 
-export function getLoggerConfig(): LoggerConfig {
-  const env = (process.env.NODE_ENV || 'development') as Environment
+const env = new EnvReaderFromProcess()
+const nodeEnv = env.nodeEnv
 
-  if (env === Environment.development) {
+export function getLoggerConfig(): LoggerConfig {
+  if (nodeEnv === Environment.development) {
     return {
       transport: {
         target: 'pino-pretty',
@@ -17,6 +22,7 @@ export function getLoggerConfig(): LoggerConfig {
       timestamp: true,
       serializers: {
         req: (request: FastifyRequest) => ({
+          id: 'value' + Math.random().toString(16).slice(2),
           method: request.method,
           url: request.url,
         }),
@@ -27,7 +33,7 @@ export function getLoggerConfig(): LoggerConfig {
     }
   }
 
-  if (env === Environment.production) {
+  if (nodeEnv === Environment.production) {
     return {
       stream: rotationStream,
       timestamp: true,
@@ -48,24 +54,53 @@ export function getLoggerConfig(): LoggerConfig {
     }
   }
 
-  if (env === Environment.test) {
+  if (nodeEnv === Environment.test) {
     return false
   }
 }
+
+// export function logBodyRequest(
+//   req: FastifyRequest<{ Body: Record<string, unknown> | undefined }>,
+//   reply: FastifyReply,
+//   next: () => void,
+// ): void {
+//   if (req.body == null) return next()
+
+//   // Hide password
+//   if (req.body.contrasenia) {
+//     req.log.info({ body: { ...req.body, contrasenia: '********' } }, 'parsed body')
+//     return next()
+//   }
+
+//   req.log.info({ body: req.body }, 'parsed body')
+//   next()
+// }
 
 export function logBodyRequest(
   req: FastifyRequest<{ Body: Record<string, unknown> | undefined }>,
   reply: FastifyReply,
   next: () => void,
 ): void {
-  if (req.body == null) return next()
+  const body = req.body
+  if (!body) return next()
 
-  // Hide password
-  if (req.body.contrasenia) {
-    req.log.info({ body: { ...req.body, contrasenia: '********' } }, 'parsed body')
+  // Evita loguear si viene multipart/form-data o muy grande
+  const ct = (req.headers['content-type'] || '').toLowerCase()
+  const isMultipart = ct.includes('multipart/form-data')
+  const rawLen = Number(req.headers['content-length'] || 0)
+  if (isMultipart || rawLen > 1024 * 50) {
+    // >50KB
+    req.log.info({ note: 'body skipped (multipart/large)' }, 'parsed body')
     return next()
   }
 
-  req.log.info({ body: req.body }, 'parsed body')
+  // Ocultar campos sensibles del body
+  const shadow = (k: string) => (k in body ? '********' : undefined)
+  const masked = {
+    ...body,
+    contrasenia: shadow('contrasenia'),
+  }
+
+  req.log.info({ body: masked }, 'parsed body')
   next()
 }

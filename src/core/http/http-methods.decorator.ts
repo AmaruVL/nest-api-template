@@ -1,5 +1,5 @@
 /**
- * @fileoverview Decoradores de métodos HTTP con propiedades adicionales
+ * @fileoverview Decoradores de métodos HTTP con propiedades adicionales personalizadas
  */
 import {
   Delete as HttpDelete,

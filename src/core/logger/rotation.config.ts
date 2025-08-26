@@ -1,14 +1,12 @@
-import * as path from 'path'
+/**
+ * @fileoverview Configuración de rotación de logs.
+ */
 import { createStream } from 'rotating-file-stream'
+import { EnvReaderFromProcess } from '../env/readers/process.reader'
 
-// TODO: Modificar lo de dokcer path a una variable de entorno
-const isDocker = process.env.IS_DOCKER === 'true'
-const dockerPath = '/app/files/logs' // Docker container path
-const defaultPath = path.join(process.cwd(), 'logs') // project-root/uploads
-
-export const LOGS_PATH = isDocker
-  ? dockerPath // Docker container path
-  : process.env.LOGS_FILES_PATH || defaultPath // Local path
+const env = new EnvReaderFromProcess()
+const logsPath = env.logsFilesPath
+console.log('LogPath', logsPath)
 
 /**
  * Generador de nombres de archivos para logs rotativos.
@@ -39,5 +37,5 @@ export const rotationStream = createStream(filenameGenerator, {
   size: '10M', // Rota al alcanzar 10 MB
   interval: '1d', // Rota cada dia
   compress: 'gzip', // Comprime usando gzip
-  path: LOGS_PATH, // Ruta donde se guardan los logs
+  path: logsPath, // Ruta donde se guardan los logs
 })

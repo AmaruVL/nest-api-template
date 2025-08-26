@@ -6,4 +6,5 @@ export * from './global/global.constants'
 export * from './global/global.enums'
 
 // Env
+export * from './env/readers/process.reader'
 export * from './env/env.service'
