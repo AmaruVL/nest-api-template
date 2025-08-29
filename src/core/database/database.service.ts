@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 import { Injectable, OnApplicationShutdown, OnModuleInit } from '@nestjs/common'
-import { PrismaClient } from 'generated/prisma'
+import { PrismaClient } from '@prisma/client'
+import { Prisma } from 'generated/prisma/client'
 import { formatPostgresQuery } from './helpers/format-query.helper'
 import { COLORS } from '../global/global.constants'
-import { EnvReaderFromProcess } from '../env/readers/process.reader'
-import { Prisma } from 'generated/prisma/client'
+import { EnvReaderFromProcess } from '../env'
 
 const env = new EnvReaderFromProcess()
 const showDbQueries = env.showDbQueries

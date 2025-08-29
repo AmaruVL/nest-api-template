@@ -3,6 +3,7 @@
  * Permite usar `BaseEnvReader` fuera del contexto de NestJS.
  * Solo contiene getters necesarios que son usados fuera del entorno de NestJS.
  */
+import 'dotenv/config'
 import path from 'node:path'
 import { Environment } from 'src/core/global/global.enums'
 import { BaseEnvReader } from './base.reader'

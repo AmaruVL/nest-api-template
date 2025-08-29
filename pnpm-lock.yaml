@@ -39,7 +39,7 @@ importers:
         specifier: 0.14.2
         version: 0.14.2
       dotenv:
-        specifier: 17.2.1
+        specifier: ^17.2.1
         version: 17.2.1
       reflect-metadata:
         specifier: 0.2.2
