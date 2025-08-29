@@ -1,6 +1,5 @@
 import { SwaggerModule } from '@nestjs/swagger'
-import { getMetadata } from '../doc/get-metadata.config'
-import { docConfigs, docPath, docOptions } from '../doc/doc.config'
+import { docConfigs, docOptions, docPath, getMetadata } from 'src/core/docs'
 import { EnvService } from 'src/core/env/env.service'
 
 export async function setupSwagger(app: any): Promise<void> {

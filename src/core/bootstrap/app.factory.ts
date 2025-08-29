@@ -1,6 +1,6 @@
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
-import { getLoggerConfig } from '../logger/logger.config'
 import { NestFactory } from '@nestjs/core'
+import { getLoggerConfig } from '../logger/logger.config'
 import { AppModule } from 'src/app.module'
 
 export async function createApp(): Promise<NestFastifyApplication> {

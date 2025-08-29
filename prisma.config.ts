@@ -1,9 +1,9 @@
 /**
  * @fileoverview Configuración de Prisma ORM
- * @see https://www.prisma.io/docs/orm/reference/prisma-config-reference#using-environment-variables
+ * @see https://www.prisma.io/docs/orm/reference/prisma-config-reference
  */
-import path from 'node:path'
 import 'dotenv/config'
+import path from 'node:path'
 import { defineConfig } from 'prisma/config'
 import { EnvReaderFromProcess } from './src/core'
 

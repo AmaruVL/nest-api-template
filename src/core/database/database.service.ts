@@ -4,8 +4,8 @@ import { PrismaClient } from 'generated/prisma'
 import { formatPostgresQuery } from './helpers/format-query.helper'
 import { COLORS } from '../global/global.constants'
 import { EnvReaderFromProcess } from '../env/readers/process.reader'
+import { Prisma } from 'generated/prisma/client'
 
-// const showDbQueries = process.env.SHOW_DB_QUERIES === 'true'
 const env = new EnvReaderFromProcess()
 const showDbQueries = env.showDbQueries
 
@@ -17,7 +17,7 @@ export class DatabaseService extends PrismaClient implements OnModuleInit, OnApp
     })
 
     if (showDbQueries) {
-      this.$on('query', (e) => {
+      ;(this as any).$on('query', (e: Prisma.QueryEvent) => {
         // Para postgres
         const sql = formatPostgresQuery(e.query, e.params)
 

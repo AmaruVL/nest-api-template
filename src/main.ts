@@ -15,7 +15,7 @@ async function bootstrap() {
   const uploadsPath = envService.uploadsFilesPath
 
   // Global app settings
-  app.setGlobalPrefix('api-sgd')
+  app.setGlobalPrefix('api')
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: false }))
 
   // Modular setup
@@ -26,12 +26,12 @@ async function bootstrap() {
 
   // Start server
   await startApp(app, port, '/api-docs') // aquí puedes usar docPath dinámico
-
-  // BigInt support in JSON
-  ;(BigInt.prototype as any).toJSON = function () {
-    const int = Number.parseInt(this.toString())
-    return int ?? this.toString()
-  }
 }
 
 void bootstrap()
+
+// BigInt support in JSON
+;(BigInt.prototype as any).toJSON = function () {
+  const int = Number.parseInt(this.toString())
+  return int ?? this.toString()
+}

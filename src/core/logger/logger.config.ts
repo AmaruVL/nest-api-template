@@ -1,6 +1,7 @@
 /**
  * @fileoverview Configuración del logger para Fastify usando Pino.
  */
+import 'dotenv/config'
 import { FastifyLoggerOptions, FastifyReply, FastifyRequest } from 'fastify'
 import { PinoLoggerOptions } from 'fastify/types/logger'
 import { Environment } from '../global/global.enums'

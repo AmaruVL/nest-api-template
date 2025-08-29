@@ -6,7 +6,6 @@ import { EnvReaderFromProcess } from '../env/readers/process.reader'
 
 const env = new EnvReaderFromProcess()
 const logsPath = env.logsFilesPath
-console.log('LogPath', logsPath)
 
 /**
  * Generador de nombres de archivos para logs rotativos.
