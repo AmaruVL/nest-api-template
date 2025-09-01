@@ -26,10 +26,10 @@
   },
   "extensions": {
     "recommendations": [
-      "dbaeumer.vscode-eslint",
+      "editorconfig.editorconfig",
       "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
       "Prisma.prisma",
-      "editorconfig.editorconfig"
-    ]
-  }
+    ],
+  },
 }

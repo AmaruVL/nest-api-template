@@ -1,10 +1,10 @@
 services:
-  app:
+  server:
     build:
       context: .
       dockerfile: Dockerfile
-    image: api-tramite
-    container_name: tramite-backend
+    image: api-tramite-img
+    container_name: api-tramite
     restart: unless-stopped
     env_file:
       - .env
